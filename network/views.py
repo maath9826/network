@@ -27,6 +27,7 @@ def index(request):
     }
     return render(request, "network/index.html",context)
 
+@login_required
 def profile(request,id):
     user = User.objects.get(id=id)
     posts = Post.objects.filter(user=user).order_by('-creation_date')
@@ -34,7 +35,9 @@ def profile(request,id):
     page = request.GET.get('page')
     paginated_posts = paginator.get_page(page)
     form = PostForm()
-    is_following = Follow.objects.filter(follower = request.user, following = user).exists()
+    is_following = False
+    if request.user.is_authenticated:
+        is_following = Follow.objects.filter(follower = request.user, following = user).exists()
     context = {
         'user_to_show': user,
         'paginated_posts': paginated_posts,

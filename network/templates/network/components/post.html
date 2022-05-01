@@ -3,7 +3,14 @@
 <div class="post">
   <div class="post_header">
     <div class="post_name_and_date">
-      <a href="{% url 'profile' post.user.id %}" class="post_user">
+
+      <a       
+      {% if user.is_authenticated %}
+        href="{% url 'profile' post.user.id %}"
+      {% else %} 
+        href="{% url 'login'  %}"
+      {% endif %} 
+      class="post_user">
         <h6>
           {{post.user}}
         </h6>
